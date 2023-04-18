@@ -22,11 +22,14 @@ In this tutorial, you will learn how to create a modern file selector with drag-
 By the end of this tutorial, you will have a fully functional file selector with drag-and-drop support and image preview that you can use in your own projects. 
 Whether you're a beginner looking to improve your JavaScript skills or an experienced developer looking for a new way to handle file uploads, this tutorial has something for you. So grab your code editor and let's get started!
 
+
 ==============
+
 Demo URL: 
 https://ayyaztech.github.io/tutorial_multiple_files_selector_with_dropzone_using_javascript_and_tailwindcss/
 Github Repo URL:
 https://github.com/AyyazTech/tutorial_multiple_files_selector_with_dropzone_using_javascript_and_tailwindcss
+
 
 ==============
 
