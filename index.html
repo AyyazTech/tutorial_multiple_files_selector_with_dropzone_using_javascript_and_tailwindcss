@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Multiple File selector with dropzone and image preview</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100">
+    <div class="p-4">
+      <label
+        for="file-input"
+        class="mb-2 font-medium flex justify-between items-center"
+      >
+        <span>Choose files</span>
+        <button
+          id="select-button"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300"
+        >
+          Select
+        </button>
+      </label>
+      <input id="file-input" type="file" multiple class="hidden" />
+      <div class="flex mb-4 flex-col">
+        <div
+          id="drop-zone"
+          class="w-full h-48 border-2 border-dashed border-gray-300 rounded-lg flex justify-center items-center text-gray-400 text-lg"
+        >
+          <span>Drag and drop files here</span>
+        </div>
+        <div
+          id="selected-files-count"
+          class="text-gray-500 text-sm font-medium"
+        ></div>
+        <div id="selected-images" class="flex flex-wrap -mx-2 mt-6"></div>
+      </div>
+    </div>
+
+    <script>
+      const fileInput = document.getElementById("file-input");
+      const dropZone = document.getElementById("drop-zone");
+      const selectedImages = document.getElementById("selected-images");
+      const selectButton = document.getElementById("select-button");
+      const selectedFilesCount = document.getElementById(
+        "selected-files-count"
+      );
+
+      selectButton.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", handleFiles);
+      dropZone.addEventListener("dragover", handleDragOver);
+      dropZone.addEventListener("dragleave", handleDragLeave);
+      dropZone.addEventListener("drop", handleDrop);
+
+      function handleFiles() {
+        const fileList = this.files;
+        displayImages(fileList);
+      }
+      function handleDragOver(event) {
+        event.preventDefault();
+        dropZone.classList.add("border-blue-500");
+        dropZone.classList.add("text-blue-500");
+      }
+
+      function handleDragLeave(event) {
+        event.preventDefault();
+        dropZone.classList.remove("border-blue-500");
+        dropZone.classList.remove("text-blue-500");
+      }
+
+      function handleDrop(event) {
+        event.preventDefault();
+        const fileList = event.dataTransfer.files;
+        displayImages(fileList);
+        dropZone.classList.remove("border-blue-500");
+        dropZone.classList.remove("text-blue-500");
+      }
+
+      function displayImages(fileList) {
+        selectedImages.innerHTML = "";
+        for (const file of fileList) {
+          const imageWrapper = document.createElement("div");
+          imageWrapper.classList.add("relative", "mx-2", "mb-2");
+          const image = document.createElement("img");
+          image.src = URL.createObjectURL(file);
+          image.classList.add("w-32", "h-32", "object-cover", "rounded-lg");
+          const removeButton = document.createElement("button");
+          removeButton.innerHTML = "&times;";
+          removeButton.classList.add(
+            "absolute",
+            "top-1",
+            "right-1",
+            "h-6",
+            "w-6",
+            "bg-gray-700",
+            "text-white",
+            "text-xs",
+            "rounded-full",
+            "flex",
+            "items-center",
+            "justify-center",
+            "opacity-50",
+            "hover:opacity-100",
+            "transition-opacity",
+            "focus:outline-none"
+          );
+
+          removeButton.addEventListener("click", () => {
+            imageWrapper.remove();
+            updateSelectedFilesCount();
+          });
+
+          imageWrapper.appendChild(image);
+          imageWrapper.appendChild(removeButton);
+          selectedImages.appendChild(imageWrapper);
+        }
+        updateSelectedFilesCount();
+      }
+
+      function updateSelectedFilesCount() {
+        const count = selectedImages.children.length;
+        if (count > 0) {
+          selectedFilesCount.textContent = `${count} file${
+            count === 1 ? "" : "s"
+          } selected`;
+        } else {
+          selectedFilesCount.textContent = "";
+        }
+      }
+    </script>
+  </body>
+</html>
